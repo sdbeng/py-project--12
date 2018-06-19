@@ -47,6 +47,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.headers.get('Content-type')
             )
             if ctype == 'multipart/form-data':
+                pdict['boundary'] = bytes(pdict['boundary'],'utf-8')
                 fields = cgi.parse_multipart(self.rfile, pdict)
                 messagecontent = fields.get('message')
             output = ""
@@ -55,8 +56,8 @@ class webServerHandler(BaseHTTPRequestHandler):
             output += "<h1> %s </h1>" % messagecontent[0]
             output += '''<form method='POST' enctype='multipart/form-data' action='/hello'><h2>What would you like me to say?</h2><input name="message" type="text" > <input type="submit" value="Submit"> </form>'''
             output += "</body></html>"
-            self.wfile.write(output.encode())
-            print(output.encode())
+            self.wfile.write(output.encode('utf-8'))
+            print(output.encode('utf-8'))
         except IOError:
             self.send_error('error mmmm...')
 
