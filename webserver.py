@@ -1,7 +1,8 @@
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import cgi
 
 
-class WebServerHandler(BaseHTTPRequestHandler):
+class webServerHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
@@ -11,8 +12,8 @@ class WebServerHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 output = ""
                 output += "<html><body>Hello world!</body></html>"
-                self.wfile.write(output)
-                print(output)
+                self.wfile.write(output.encode())
+                print(output.encode())
                 return
         except IOError:
             self.send_error(404, 'File Not Found: %s' % self.path)
@@ -20,8 +21,8 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
 def main():
     try:
-        port = 8080
-        server = HTTPServer(('', port), WebServerHandler)
+        port = 8000
+        server = HTTPServer(('', port), webServerHandler)
         print("Web Server running on port %s" % port)
         server.serve_forever()
     except KeyboardInterrupt:
